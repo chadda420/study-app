@@ -1,0 +1,75 @@
+.decks-layout{
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    gap:15px;
+   
+}
+
+.deck-box-edit{
+    position: relative;
+    flex-direction: column;
+    display: flex;
+    background-color: grey;
+    align-items: center;
+    width:150px;
+    height:150px;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    padding-bottom: 30px;
+    
+   
+}
+
+.edit-buttons{
+    display: flex;
+    position: absolute;
+   
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    justify-content: space-between;
+    padding: 0 10px;
+    
+}
+
+.card-id-row {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.card-edit-form {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  height:400px;
+ 
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.nav-buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-edit-form input,
+.card-edit-form textarea {
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none; /* optional: prevent manual resizing */
+}
+
+.card-edit-form textarea {
+  height: 100%; /* take full height of form */
+}

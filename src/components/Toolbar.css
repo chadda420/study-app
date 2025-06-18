@@ -1,0 +1,16 @@
+.toolbar{
+    display: flex;
+    position: relative;
+   
+    flex-direction: column;
+    
+    }
+
+.nav-icon{
+    height: 40px;
+    width:100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+}

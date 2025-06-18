@@ -1,10 +1,20 @@
-.cm-layout{
+#cm-layout{
     display: flex;
     justify-content: center;
     flex-direction: column ;
     align-items: center;
+    position:relative;
     
     
+}
+.flashcard-form{
+    display: flex;
+}
+.flashcard-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: last baseline;
 }
 #question-input{
     height:50px;
@@ -22,6 +32,7 @@
 #answer-field{
     height:100%;
     border-radius:10px;
+    resize: none;
    
     
 }
@@ -29,9 +40,32 @@
 #submit-btn{
     position: relative;
     left: 530px;
+    bottom: 10px;
+    height: 30px;
+    padding-right: 10px;
+    border-radius: 10px;
+    color:rgb(40, 63, 70);
+    background-color: rgb(245, 249, 252);
+    margin-top: 0;
 }
 
 ul {
   list-style-type: none;
   padding-left:none;
+}
+
+.deckdd{
+    display: inline;
+}
+
+.clear-button{
+    position: relative;
+    top:20px;
+    height:30px;
+  
+    
+    
+   
+    border-radius: 10px;
+
 }

@@ -1,0 +1,26 @@
+.decks-layout{
+    display:flex;
+    flex-wrap: wrap;
+    gap:15px;
+}
+
+.deck-box{
+    display: flex;
+    background-color: grey;
+    align-items: center;
+    width:150px;
+    height:150px;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+   
+}
+
+.card-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,75 +1,150 @@
-import './CreateMode.css'
-export default function CreateMode({question, setQuestion, answer, setAnswer, selectedDeck, setSelectedDeck, decks, setDecks}){
-    function handleSubmit(e){
-        e.preventDefault()
-        const newCard = {question, answer}
-        const updatedDecks = decks.map(deck => {
-            if(deck.name === selectedDeck){
-                return {...deck, 
-                    cards:[...deck.cards, newCard]}
-            }
-            return deck
-        })
-        setDecks(updatedDecks)
-    
-        
-        setQuestion('')
-        setAnswer('')    
-    
-    }
+import './CreateMode.css';
+import axios from 'axios';
 
-    function clearDeck(e){
-        const updatedDecks = decks.map(deck => {
-            if(deck.name === selectedDeck){
-                return {...deck, cards: []}
-            }
-            return deck
-            
-        })
-        setDecks(updatedDecks)
-    }
+export default function CreateMode({
+  question,
+  setQuestion,
+  answer,
+  setAnswer,
+  selectedDeck,
+  setSelectedDeck,
+  decks,
+  setDecks,
+  mode,
+}) {
+  async function handleSubmit(e) {
+    e.preventDefault(); // prevents page reload of form submission
 
-    function handleDeckSelection(e){
-         const selected = decks.find(deck => deck.name === e.target.value);
-         setSelectedDeck(selected)
-    }
+            if (!selectedDeck || !question.trim() || !answer.trim()) {
+            alert('Please select a deck and fill in both fields.');
+            return;
+        }
+        console.log("Selected Deck:", selectedDeck);
+        try {
+            const res = await axios.put(`http://localhost:3001/api/test/decks/${selectedDeck._id}`, {
+                question,
+                answer,
+            });
 
-    return(
-        <div className='cm-layout'>
-        <header className='header'>Create mode: "mode" </header>
-        <select name="deck-dropdown" id="deck-dropdown">
-            <option value="" selected disabled>Select a deck</option>
-            {decks.map((deck, idx) => {
-                return <option key={deck.name} value={deck.name} onClick={handleDeckSelection}>{deck.name}</option>
-            })}
-        </select>
+            const updatedDeck = res.data;
 
+            const updatedDecks = decks.map(deck =>
+                deck._id === updatedDeck._id ? updatedDeck : deck
+            );
+            setDecks(updatedDecks);
+            setQuestion('');
+            setAnswer('');
+        } catch (err) {
+            console.error(err);
+            alert('Error adding card: ' + err.message);
+        }
 
-        <form onSubmit={handleSubmit} className='flashcard-form'>
+//     const allCardIds = decks.flatMap(deck =>
+//       deck.cards.map(card => card.id ?? 0)
+//     );
+
+//     const lastCardId = allCardIds.length ? Math.max(...allCardIds) : 0;
+//     const newCardId = lastCardId + 1;
+
+//     const newCard = { question, answer, id: newCardId };
+
+//     const updatedDecks = decks.map(deck => {
+//       if (deck.name === selectedDeck.name) {
+//         return {
+//           ...deck,
+//           cards: [...deck.cards, newCard],
+//         };
+//       }
+//       return deck;
+//     });
+
+//     setDecks(updatedDecks); // ^^ sets new card to designated deck via dropdown/in state and provides it an incrementing ID
+
+//     setQuestion(''); // clears input fields
+//     setAnswer('');
+  }
+
+  function clearDeck(e) {
+    e.preventDefault();
+
+    //         if (!selectedDeck) return;
+
+    //     try {
+    //         const res = await axios.delete(`http://localhost:3001/decks/${selectedDeck._id}/cards/clear`);
+    //         const updatedDeck = res.data;
+
+    //         const updatedDecks = decks.map(deck =>
+    //             deck._id === updatedDeck._id ? updatedDeck : deck
+    //         );
+    //         setDecks(updatedDecks);
+    //     } catch (err) {
+    //         console.error(err);
+    //         alert('Error clearing deck: ' + err.message);
+    //     }
+
+    const updatedDecks = decks.map(deck => {
+      if (deck.name === selectedDeck.name) {
+        return { ...deck, cards: [] };
+      }
+      return deck;
+    });
+
+    setDecks(updatedDecks);
+  }
+
+  function handleDeckSelection(e) {
+    const selected = decks.find(deck => deck.name === e.target.value);
+    setSelectedDeck(selected || '');
+  }
+
+  return (
+    <div id="cm-layout">
+      <header className="header">Current mode: {mode} </header>
+
+      <label htmlFor="deck-dropdown" className="deckdd">Deck:</label>
+      <select
+        name="deck-dropdown"
+        id="deck-dropdown"
+        defaultValue={selectedDeck?.name || ''}
+        onChange={handleDeckSelection}
+      >
+        <option value="" disabled>
+          Select a deck
+        </option>
+        {decks.map(deck => (
+          <option key={deck.name} value={deck.name}>
+            {deck.name}
+          </option>
+        ))}
+      </select>
+
+      <form onSubmit={handleSubmit} className="flashcard-form">
         <div className="flashcard-container">
-            <div className="flashcard-input">
-                <input type="text" placeholder="Question"  id="question-input" value={question} onChange={(e)=> setQuestion(e.target.value)} />
-                <textarea name="answer-field" id="answer-field" placeholder="Answer" value={answer} onChange={(e) => setAnswer(e.target.value)}>
+          <div className="flashcard-input">
+            <input
+              type="text"
+              placeholder="Question"
+              id="question-input"
+              value={question}
+              onChange={e => setQuestion(e.target.value)}
+            />
+            <textarea
+              name="answer-field"
+              id="answer-field"
+              placeholder="Answer"
+              value={answer}
+              onChange={e => setAnswer(e.target.value)}
+            />
+          </div>
 
-                </textarea>
-                
-            </div>
-            <button type='submit' id='submit-btn'>Submit</button>
-            <button onClick={clearDeck}>clear deck</button>
+          <button className="clear-button" onClick={clearDeck}>
+            Clear Deck
+          </button>
+          <button type="submit" id="submit-btn">
+            Submit
+          </button>
         </div>
-         </form>
-        
-        {/* <ul>
-            {selectedDeck.map((card, i) => 
-            
-               card.question !== '' && card.answer !== '' 
-            ? (
-               <li key={i}><strong>Q:</strong> {card.question} <br /> 
-                <strong>A: </strong>{card.answer}</li>) : null )}
-            
-        </ul> */}
-        </div>
-       
-        
-    )
+      </form>
+    </div>
+  );
 }
