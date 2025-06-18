@@ -21,7 +21,8 @@ export default function CreateMode({
         }
         console.log("Selected Deck:", selectedDeck);
         try {
-            const res = await axios.put(`http://localhost:3001/api/test/decks/${selectedDeck._id}`, {
+            console.log("Deck ID being submitted:", selectedDeck?._id);
+            const res = await axios.post(`http://localhost:3001/api/decks/${selectedDeck._id}/cards`, {
                 question,
                 answer,
             });
@@ -64,32 +65,32 @@ export default function CreateMode({
 //     setAnswer('');
   }
 
-  function clearDeck(e) {
+  async function clearDeck(e) {
     e.preventDefault();
 
-    //         if (!selectedDeck) return;
+            if (!selectedDeck) return;
 
-    //     try {
-    //         const res = await axios.delete(`http://localhost:3001/decks/${selectedDeck._id}/cards/clear`);
-    //         const updatedDeck = res.data;
+        try {
+            const res = await axios.delete(`http://localhost:3001/decks/${selectedDeck._id}/cards/clear`);
+            const updatedDeck = res.data;
 
-    //         const updatedDecks = decks.map(deck =>
-    //             deck._id === updatedDeck._id ? updatedDeck : deck
-    //         );
-    //         setDecks(updatedDecks);
-    //     } catch (err) {
-    //         console.error(err);
-    //         alert('Error clearing deck: ' + err.message);
-    //     }
+            const updatedDecks = decks.map(deck =>
+                deck._id === updatedDeck._id ? updatedDeck : deck
+            );
+            setDecks(updatedDecks);
+        } catch (err) {
+            console.error(err);
+            alert('Error clearing deck: ' + err.message);
+        }
 
-    const updatedDecks = decks.map(deck => {
-      if (deck.name === selectedDeck.name) {
-        return { ...deck, cards: [] };
-      }
-      return deck;
-    });
+//     const updatedDecks = decks.map(deck => {
+//       if (deck.name === selectedDeck.name) {
+//         return { ...deck, cards: [] };
+//       }
+//       return deck;
+//     });
 
-    setDecks(updatedDecks);
+//     setDecks(updatedDecks);
   }
 
   function handleDeckSelection(e) {

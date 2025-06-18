@@ -19,20 +19,27 @@ export default function App() {
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [editedCardIndex, setEditedCardIndex] = useState(0)
   // const [deckIndex, setDeckIndex] = useState(0)
-  const [decks, setDecks] = useState([
-  {id: 1, name: "Javascript", cards: []},
-  {id: 2, name: "Spanish", cards: []},
-  {id: 3, name: "React", cards: []},
-  {id: 4, name: "HTML", cards: []},
-  {id: 5, name: "CSS", cards: []}
-])
+//   const [decks, setDecks] = useState([
+//   {id: 1, name: "Javascript", cards: []},
+//   {id: 2, name: "Spanish", cards: []},
+//   {id: 3, name: "React", cards: []},
+//   {id: 4, name: "HTML", cards: []},
+//   {id: 5, name: "CSS", cards: []}
+// ])
+const [decks, setDecks] = useState([])
 
 
-  useEffect(() => {
-    fetch('http://localhost:3001/test/decks')
-      .then(res => res.json())
-      .then(data => console.log(data.message));
-  }, []);
+useEffect(() => {
+  fetch('http://localhost:3001/api/decks')
+    .then(res => res.json())
+    .then(data => {
+      console.log("Fetched decks:", data); // optional: for debugging
+      setDecks(data); // update React state with fetched decks
+    })
+    .catch(err => {
+      console.error("Failed to fetch decks:", err); // error handling
+    });
+}, []);
 
 
   return (
